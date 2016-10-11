@@ -9,16 +9,6 @@ var _me = require('../src/me');
 //simple asserts
 //complex asserts
 
-beforeEach(function () {
-    console.log('before each');
-    (0, _barmen.free)();
-    (0, _me.sober)();
-});
-
-afterEach(function () {
-    console.log('after each');
-});
-
 describe('given: barmen is free and I want 50 grams', function () {
     describe('when: i ask him to pour 50 grams', function () {
         it('then: i got a glass with 50 grams of whisky', function () {

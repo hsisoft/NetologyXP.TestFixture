@@ -3,6 +3,7 @@ import { pour, free as freeBarmen } from '../src/barmen'
 import { drink, sober, getTotallyDrunked } from '../src/me'
 
 suite('when barmen pour whisky', function () {
+
     setup(function () {
         console.log('setup');
         freeBarmen();

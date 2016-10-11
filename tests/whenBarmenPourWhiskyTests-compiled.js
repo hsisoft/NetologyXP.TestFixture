@@ -11,6 +11,7 @@ var _me = require('../src/me');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 suite('when barmen pour whisky', function () {
+
     setup(function () {
         console.log('setup');
         (0, _barmen.free)();
