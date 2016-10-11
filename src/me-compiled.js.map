@@ -1,0 +1,1 @@
+{"version":3,"sources":["me.js"],"names":[],"mappings":";;;;;QAAgB,K,GAAA,K;AAAT,SAAS,KAAT,CAAe,MAAf,EAAuB;AAC1B,WAAO,MAAP;AACH","file":"me-compiled.js","sourcesContent":["export function drink(volume) {\n    return volume\n}"]}
