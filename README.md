@@ -9,4 +9,3 @@
 * simple assert
 * complex assert
 * assert errors/exceptions
-* complex assert
