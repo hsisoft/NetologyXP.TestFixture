@@ -9,6 +9,10 @@ export function sober() {
     totalyDrunked = 0;
 }
 
+export function isDrunked() {
+    return totalyDrunked > 150;
+}
+
 export function getTotallyDrunked() {
     return totalyDrunked;
 }

@@ -8,8 +8,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 suite('time tests', function () {
     var minutes = 40;
+    var getMinutes = void 0;
 
     setup(function () {
+        getMinutes = Date.prototype.getMinutes;
         Date.prototype.getMinutes = function () {
             return minutes;
         };
@@ -29,6 +31,8 @@ suite('time tests', function () {
 
     teardown(function () {
         console.log('teardown');
+        Date.prototype.getMinutes = getMinutes;
+        console.log(new Date().getMinutes());
     });
 });
 
