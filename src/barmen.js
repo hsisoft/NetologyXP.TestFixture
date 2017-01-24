@@ -1,17 +1,27 @@
-var totalRequests = 0;
+'use strict';
 
-export function pour(volume) {
-    if (volume < 0) {
-        throw new Error('Invalid volume of whisky');
+class Barmen {
+    constructor() {
+        this.totalRequests = 0;
     }
 
-    totalRequests++;
-    if (totalRequests % 2 == 0) {
-        return volume + 50;
+    pour(volume) {
+        if (volume < 0) {
+            throw new Error('Invalid volume of whisky');
+        }
+
+        this.totalRequests++;
+
+        if (this.totalRequests % 2 == 0) {
+            return volume + 50;
+        }
+
+        return volume;
     }
-    return volume;
+
+    free() {
+        this.totalRequests = 0;
+    }
 }
 
-export function free() {
-    totalRequests = 0;
-}
+module.exports = Barmen;
