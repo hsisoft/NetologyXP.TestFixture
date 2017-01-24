@@ -4,17 +4,17 @@ var assert = require('assert');
 
 describe('date time tests', function () {
     let minutes = 40;
-    let getMinutes;
+    let getMinutesFunction;
 
     beforeEach(function () {
-        getMinutes = Date.prototype.getMinutes;
+        getMinutesFunction = Date.prototype.getMinutes;
         Date.prototype.getMinutes = function () {
             return minutes;
         };
     });
 
-    var waitForMinutes = function (interval) {
-        minutes += interval;
+    var waitForMinutes = function (intervalInMinutes) {
+        minutes += intervalInMinutes;
     };
 
     it('Wait for interval in minutes', function () {
@@ -28,8 +28,7 @@ describe('date time tests', function () {
     afterEach(function () {
         console.log('teardown');
 
-        Date.prototype.getMinutes = getMinutes;
+        Date.prototype.getMinutes = getMinutesFunction;
         console.log(new Date().getMinutes())
-    })
-
+    });
 });
