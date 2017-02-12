@@ -13,8 +13,21 @@ setup(function () {
 	game = new GameModule.Game();
 });
 
-class testClass {
-	static testTerrorists(roundsWinnersCombination) {
+class TestClass {
+	constructor() {
+		this._roundsWinnersCombination = [
+			{terroristsWins: 0, counterTerroristsWins: 0, score: '0 / 0'},
+			{terroristsWins: 0, counterTerroristsWins: 1, score: '0 / 1'},
+			{terroristsWins: 0, counterTerroristsWins: 2, score: '0 / 2'},
+			{terroristsWins: 1, counterTerroristsWins: 0, score: '1 / 0'},
+			{terroristsWins: 1, counterTerroristsWins: 1, score: '1 / 1'},
+			{terroristsWins: 1, counterTerroristsWins: 2, score: '1 / 2'},
+			{terroristsWins: 2, counterTerroristsWins: 0, score: '2 / 0'},
+			{terroristsWins: 2, counterTerroristsWins: 1, score: '2 / 1'},
+		];
+	};
+
+	testTerrorists(roundsWinnersCombination) {
 		for (var i = 0; i < roundsWinnersCombination.terroristsWins; i++) {
 			game.StartRound();
 			game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
@@ -22,28 +35,22 @@ class testClass {
 		}
 	}
 
-	static testCounterTerrorists(roundsWinnersCombination) {
+	testCounterTerrorists(roundsWinnersCombination) {
 		for (var i = 0; i < roundsWinnersCombination.counterTerroristsWins; i++) {
 			game.StartRound();
 			game.EndRound();
 		}
 	}
+
+	get roundsWinnersCombination (){
+		return this._roundsWinnersCombination;
+	};
 }
 
-var roundsWinnersCombination = [
-	{terroristsWins: 0, counterTerroristsWins: 0, score: '0 / 0'},
-	{terroristsWins: 0, counterTerroristsWins: 1, score: '0 / 1'},
-	{terroristsWins: 0, counterTerroristsWins: 2, score: '0 / 2'},
-	{terroristsWins: 1, counterTerroristsWins: 0, score: '1 / 0'},
-	{terroristsWins: 1, counterTerroristsWins: 1, score: '1 / 1'},
-	{terroristsWins: 1, counterTerroristsWins: 2, score: '1 / 2'},
-	{terroristsWins: 2, counterTerroristsWins: 0, score: '2 / 0'},
-	{terroristsWins: 2, counterTerroristsWins: 1, score: '2 / 1'},
-];
+const testClass = new TestClass();
 
 suite('When Terrorist and Counter-Terrorists Teams', function () {
-
-	roundsWinnersCombination.forEach(function (roundsWinnersCombination) {
+	testClass.roundsWinnersCombination.forEach(function (roundsWinnersCombination) {
 		test('win ' + roundsWinnersCombination.terroristsWins + ' to '
 			+ roundsWinnersCombination.counterTerroristsWins + ' then score should be '
 			+ roundsWinnersCombination.score, function () {
