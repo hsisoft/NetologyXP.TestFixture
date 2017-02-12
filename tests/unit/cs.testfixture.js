@@ -28,18 +28,18 @@ function testCounterTerrorists(roundsWinnersCombination) {
 	}
 }
 
-suite('When Terrorist and Counter-Terrorists Teams', function () {
+var roundsWinnersCombination = [
+	{terroristsWins: 0, counterTerroristsWins: 0, score: '0 / 0'},
+	{terroristsWins: 0, counterTerroristsWins: 1, score: '0 / 1'},
+	{terroristsWins: 0, counterTerroristsWins: 2, score: '0 / 2'},
+	{terroristsWins: 1, counterTerroristsWins: 0, score: '1 / 0'},
+	{terroristsWins: 1, counterTerroristsWins: 1, score: '1 / 1'},
+	{terroristsWins: 1, counterTerroristsWins: 2, score: '1 / 2'},
+	{terroristsWins: 2, counterTerroristsWins: 0, score: '2 / 0'},
+	{terroristsWins: 2, counterTerroristsWins: 1, score: '2 / 1'},
+];
 
-	var roundsWinnersCombination = [
-		{terroristsWins: 0, counterTerroristsWins: 0, score: '0 / 0'},
-		{terroristsWins: 0, counterTerroristsWins: 1, score: '0 / 1'},
-		{terroristsWins: 0, counterTerroristsWins: 2, score: '0 / 2'},
-		{terroristsWins: 1, counterTerroristsWins: 0, score: '1 / 0'},
-		{terroristsWins: 1, counterTerroristsWins: 1, score: '1 / 1'},
-		{terroristsWins: 1, counterTerroristsWins: 2, score: '1 / 2'},
-		{terroristsWins: 2, counterTerroristsWins: 0, score: '2 / 0'},
-		{terroristsWins: 2, counterTerroristsWins: 1, score: '2 / 1'},
-	];
+suite('When Terrorist and Counter-Terrorists Teams', function () {
 
 	roundsWinnersCombination.forEach(function (roundsWinnersCombination) {
 		test('win ' + roundsWinnersCombination.terroristsWins + ' to '
