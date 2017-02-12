@@ -13,6 +13,21 @@ setup(function () {
 	game = new GameModule.Game();
 });
 
+function testTerrorists(roundsWinnersCombination) {
+	for (var i = 0; i < roundsWinnersCombination.terroristsWins; i++) {
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.EndRound();
+	}
+}
+
+function testCounterTerrorists(roundsWinnersCombination) {
+	for (var i = 0; i < roundsWinnersCombination.counterTerroristsWins; i++) {
+		game.StartRound();
+		game.EndRound();
+	}
+}
+
 suite('When Terrorist and Counter-Terrorists Teams', function () {
 
 	var roundsWinnersCombination = [
@@ -34,27 +49,12 @@ suite('When Terrorist and Counter-Terrorists Teams', function () {
 			let referenceResult = roundsWinnersCombination.score;
 
 			// Action
-			function testTerrorists() {
-				for (var i = 0; i < roundsWinnersCombination.terroristsWins; i++) {
-					game.StartRound();
-					game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-					game.EndRound();
-				}
-			}
-
-			function testCounterTerrorists() {
-				for (var i = 0; i < roundsWinnersCombination.counterTerroristsWins; i++) {
-					game.StartRound();
-					game.EndRound();
-				}
-			}
-
 			if (roundsWinnersCombination.terroristsWins >= roundsWinnersCombination.counterTerroristsWins) {
-				testCounterTerrorists();
-				testTerrorists();
+				testCounterTerrorists(roundsWinnersCombination);
+				testTerrorists(roundsWinnersCombination);
 			} else {
-				testTerrorists();
-				testCounterTerrorists();
+				testTerrorists(roundsWinnersCombination);
+				testCounterTerrorists(roundsWinnersCombination);
 			}
 
 			// Assert
