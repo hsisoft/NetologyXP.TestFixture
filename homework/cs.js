@@ -59,7 +59,6 @@ module.exports.Game = class Game {
 	EndRound(){
 		if (this._gameState !== GameState.Idle) {
 			this._activeRound.EndRound();
-			this._roundPlayed++;
 
 			if (this._activeRound.roundState === RoundState.Finished_TerroristsWon) {
 				this._roundsTerroristsWon++;
@@ -77,6 +76,7 @@ module.exports.Game = class Game {
 				return;
 			}
 
+			this._roundPlayed++;
 			this._gameState = GameState.Idle;
 		}
 	};

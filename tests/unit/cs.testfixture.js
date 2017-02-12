@@ -1,217 +1,271 @@
 "use strict";
 
 var assert = require('assert');
-const GameModule = require('../homework/cs');
-const BombModule = require('../homework/bomb');
-const TerroristModule = require('../homework/terrorists');
-const CounterTerroristModule = require('../homework/counterTerrorists');
+const GameModule = require('../../homework/cs');
+const BombModule = require('../../homework/bomb');
+const TerroristModule = require('../../homework/terrorists');
+const CounterTerroristModule = require('../../homework/counterTerrorists');
 
-suite('When a game starts', function () {
-	test('game status should be idle', function () {
-        // Arrage
-		let game = new GameModule.Game();
-		let referenceResult = GameModule.GameState.Idle;
+suite('When Terrorist and Counter-Terrorists Teams', function () {
 
-		// Missed Action Scheme
-		// no actions needed
+	var roundsWinnersCombination = [
+		{terroristsWins: 0, counterTerroristsWins: 0, score: '0 / 0'},
+		{terroristsWins: 0, counterTerroristsWins: 1, score: '0 / 1'},
+		{terroristsWins: 0, counterTerroristsWins: 2, score: '0 / 2'},
+		{terroristsWins: 1, counterTerroristsWins: 0, score: '1 / 0'},
+		{terroristsWins: 1, counterTerroristsWins: 1, score: '1 / 1'},
+		{terroristsWins: 1, counterTerroristsWins: 2, score: '1 / 2'},
+		{terroristsWins: 2, counterTerroristsWins: 0, score: '2 / 0'},
+		{terroristsWins: 2, counterTerroristsWins: 1, score: '2 / 1'},
+	];
 
-        // Assert
-		assert.equal(referenceResult, game.gameState);
-	});
+	roundsWinnersCombination.forEach(function (roundsWinnersCombination) {
+		test('win ' + roundsWinnersCombination.terroristsWins + ' to '
+			+ roundsWinnersCombination.counterTerroristsWins + ' then score should be '
+			+ roundsWinnersCombination.score, function () {
+			// Arrage
+			let game = new GameModule.Game();
+			let referenceResult = roundsWinnersCombination.score;
+
+			// Action
+			function testTerrorists() {
+				for (var i = 0; i < roundsWinnersCombination.terroristsWins; i++) {
+					game.StartRound();
+					game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+					game.EndRound();
+				}
+			}
+
+			function testCounterTerrorists() {
+				for (var i = 0; i < roundsWinnersCombination.counterTerroristsWins; i++) {
+					game.StartRound();
+					game.EndRound();
+				}
+			}
+
+			if (roundsWinnersCombination.terroristsWins >= roundsWinnersCombination.counterTerroristsWins) {
+				testCounterTerrorists();
+				testTerrorists();
+			} else {
+				testTerrorists();
+				testCounterTerrorists();
+			}
+
+			// Assert
+			assert.equal(referenceResult, game.score);
+		});
+	})
 });
 
-suite('When a round starts', function () {
-	test('w/o round number - its number should be increased', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = 2;
+/*
 
-		// Action
-		game.StartRound();
-		game.EndRound();
-		game.StartRound();
+ suite('When a game starts', function () {
+ test('game status should be idle', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = GameModule.GameState.Idle;
 
-		// Assert
-		assert.equal(referenceResult, game.activeRound.roundNumber);
-	});
+ // Missed Action Scheme
+ // no actions needed
 
-	test('with number 1 - its number should be 1', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = 1;
+ // Assert
+ assert.equal(referenceResult, game.gameState);
+ });
+ });
 
-		// Action
-		game.StartRound(1);
+ suite('When a round starts', function () {
+ test('w/o round number - its number should be increased', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = 2;
 
-		// Assert
-		assert.equal(referenceResult, game.activeRound.roundNumber);
-	});
+ // Action
+ game.StartRound();
+ game.EndRound();
+ game.StartRound();
 
-	test('with number 2 - its number should be 2', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = 2;
+ // Assert
+ assert.equal(referenceResult, game.activeRound.roundNumber);
+ });
 
-		// Action
-		game.StartRound(2);
+ test('with number 1 - its number should be 1', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = 1;
 
-		// Assert
-		assert.equal(referenceResult, game.activeRound.roundNumber);
-	});
+ // Action
+ game.StartRound(1);
 
-	test('game status should be playing', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = GameModule.GameState.Playing
+ // Assert
+ assert.equal(referenceResult, game.activeRound.roundNumber);
+ });
 
-		// Action
-		game.StartRound();
+ test('with number 2 - its number should be 2', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = 2;
 
-		// Assert
-		assert.equal(referenceResult, game.gameState);
-	});
+ // Action
+ game.StartRound(2);
 
-	test('a bomb should be ready', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = BombModule.BombState.ready;
+ // Assert
+ assert.equal(referenceResult, game.activeRound.roundNumber);
+ });
 
-		// Action
-		game.StartRound();
+ test('game status should be playing', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = GameModule.GameState.Playing
 
-		// Assert
-		assert.equal(referenceResult, game.activeRound.bomb.state);
-	});
-});
+ // Action
+ game.StartRound();
 
-suite('When the first round ends and nothing happens', function () {
-	test('then CT win', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = GameModule.RoundState.Finished_CounterTerroristsWon;
+ // Assert
+ assert.equal(referenceResult, game.gameState);
+ });
 
-		// Action
-		game.StartRound();
-		game.EndRound();
+ test('a bomb should be ready', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = BombModule.BombState.ready;
 
-		// Assert
-		assert.equal(referenceResult, game.activeRound.roundState);
-	});
+ // Action
+ game.StartRound();
 
-	test('then score is 0 / 1', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = '0 / 1';
+ // Assert
+ assert.equal(referenceResult, game.activeRound.bomb.state);
+ });
+ });
 
-		// Action
-		game.StartRound();
-		game.EndRound();
+ suite('When the first round ends and nothing happens', function () {
+ test('then CT win', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = GameModule.RoundState.Finished_CounterTerroristsWon;
 
-		// Assert
-		assert.equal(referenceResult, game.score);
-	});
-});
+ // Action
+ game.StartRound();
+ game.EndRound();
 
-suite('When the first round ends and a bomb is planted', function () {
-	test('then T win', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = GameModule.RoundState.Finished_TerroristsWon;
+ // Assert
+ assert.equal(referenceResult, game.activeRound.roundState);
+ });
 
-		// Action
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.EndRound();
+ test('then score is 0 / 1', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = '0 / 1';
 
-		// Assert
-		assert.equal(referenceResult, game.activeRound.roundState);
-	});
+ // Action
+ game.StartRound();
+ game.EndRound();
 
-	test('then score is 1 / 0', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = '1 / 0';
+ // Assert
+ assert.equal(referenceResult, game.score);
+ });
+ });
 
-		// Action
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.EndRound();
+ suite('When the first round ends and a bomb is planted', function () {
+ test('then T win', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = GameModule.RoundState.Finished_TerroristsWon;
 
-		// Assert
-		assert.equal(referenceResult, game.score);
-	});
-});
+ // Action
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.EndRound();
 
-suite('When the first round ends and a bomb is defused', function () {
-	test('then CT win', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = GameModule.RoundState.Finished_CounterTerroristsWon;
+ // Assert
+ assert.equal(referenceResult, game.activeRound.roundState);
+ });
 
-		// Action
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
-		game.EndRound();
+ test('then score is 1 / 0', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = '1 / 0';
 
-		// Assert
-		assert.equal(referenceResult, game.activeRound.roundState);
-	});
+ // Action
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.EndRound();
 
-	test('then score is 0 / 1', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = '0 / 1';
+ // Assert
+ assert.equal(referenceResult, game.score);
+ });
+ });
 
-		// Action
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
-		game.EndRound();
+ suite('When the first round ends and a bomb is defused', function () {
+ test('then CT win', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = GameModule.RoundState.Finished_CounterTerroristsWon;
 
-		// Assert
-		assert.equal(referenceResult, game.score);
-	});
-});
+ // Action
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+ game.EndRound();
 
-suite('When CT win for the second time', function () {
-	test('then CT win a game', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = GameModule.GameState.Finished_CounterTerroristsWon;
+ // Assert
+ assert.equal(referenceResult, game.activeRound.roundState);
+ });
 
-		// Action
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
-		game.EndRound();
+ test('then score is 0 / 1', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = '0 / 1';
 
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
-		game.EndRound();
+ // Action
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+ game.EndRound();
 
-		// Assert
-		assert.equal(referenceResult, game.gameState);
-	});
-});
+ // Assert
+ assert.equal(referenceResult, game.score);
+ });
+ });
 
-suite('When T win for the second time', function () {
-	test('then T win a game', function () {
-		// Arrage
-		let game = new GameModule.Game();
-		let referenceResult = GameModule.GameState.Finished_TerroristsWon;
+ suite('When CT win for the second time', function () {
+ test('then CT win a game', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = GameModule.GameState.Finished_CounterTerroristsWon;
 
-		// Action
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.EndRound();
+ // Action
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+ game.EndRound();
 
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.EndRound();
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+ game.EndRound();
 
-		// Assert
-		assert.equal(referenceResult, game.gameState);
-	});
-});
+ // Assert
+ assert.equal(referenceResult, game.gameState);
+ });
+ });
+
+ suite('When T win for the second time', function () {
+ test('then T win a game', function () {
+ // Arrage
+ let game = new GameModule.Game();
+ let referenceResult = GameModule.GameState.Finished_TerroristsWon;
+
+ // Action
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.EndRound();
+
+ game.StartRound();
+ game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+ game.EndRound();
+
+ // Assert
+ assert.equal(referenceResult, game.gameState);
+ });
+ });
+ */
