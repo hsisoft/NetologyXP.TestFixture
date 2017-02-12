@@ -13,18 +13,20 @@ setup(function () {
 	game = new GameModule.Game();
 });
 
-function testTerrorists(roundsWinnersCombination) {
-	for (var i = 0; i < roundsWinnersCombination.terroristsWins; i++) {
-		game.StartRound();
-		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
-		game.EndRound();
+class testClass {
+	static testTerrorists(roundsWinnersCombination) {
+		for (var i = 0; i < roundsWinnersCombination.terroristsWins; i++) {
+			game.StartRound();
+			game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+			game.EndRound();
+		}
 	}
-}
 
-function testCounterTerrorists(roundsWinnersCombination) {
-	for (var i = 0; i < roundsWinnersCombination.counterTerroristsWins; i++) {
-		game.StartRound();
-		game.EndRound();
+	static testCounterTerrorists(roundsWinnersCombination) {
+		for (var i = 0; i < roundsWinnersCombination.counterTerroristsWins; i++) {
+			game.StartRound();
+			game.EndRound();
+		}
 	}
 }
 
@@ -50,11 +52,11 @@ suite('When Terrorist and Counter-Terrorists Teams', function () {
 
 			// Action
 			if (roundsWinnersCombination.terroristsWins >= roundsWinnersCombination.counterTerroristsWins) {
-				testCounterTerrorists(roundsWinnersCombination);
-				testTerrorists(roundsWinnersCombination);
+				testClass.testCounterTerrorists(roundsWinnersCombination);
+				testClass.testTerrorists(roundsWinnersCombination);
 			} else {
-				testTerrorists(roundsWinnersCombination);
-				testCounterTerrorists(roundsWinnersCombination);
+				testClass.testTerrorists(roundsWinnersCombination);
+				testClass.testCounterTerrorists(roundsWinnersCombination);
 			}
 
 			// Assert
