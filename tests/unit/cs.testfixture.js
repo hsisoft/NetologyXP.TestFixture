@@ -6,6 +6,13 @@ const BombModule = require('../../homework/bomb');
 const TerroristModule = require('../../homework/terrorists');
 const CounterTerroristModule = require('../../homework/counterTerrorists');
 
+let game = undefined;
+
+setup(function () {
+	console.log('setup');
+	game = new GameModule.Game();
+});
+
 suite('When Terrorist and Counter-Terrorists Teams', function () {
 
 	var roundsWinnersCombination = [
@@ -24,7 +31,6 @@ suite('When Terrorist and Counter-Terrorists Teams', function () {
 			+ roundsWinnersCombination.counterTerroristsWins + ' then score should be '
 			+ roundsWinnersCombination.score, function () {
 			// Arrage
-			let game = new GameModule.Game();
 			let referenceResult = roundsWinnersCombination.score;
 
 			// Action
